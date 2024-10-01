@@ -3,9 +3,11 @@ import numpy as np
 
 def _trim_array(vect: np.ndarray, percentage: float = None, limit: int | tuple[int, int] = None, axis: int = 0):
     """
+    Trims an array based on percentage or fixed limits along a specified axis.
+
     Input:
         - vect: array (n x axis)
-        - percentage: percentage of data to be removed from both ends (0 ~ 0.5)
+        - percentage: percentage of data to remove from both ends (0 ~ 0.5)
         - limit: minimum (and optionally maximum) number of elements to remove from both ends
         - axis: the axis along which to trim the array
 
@@ -44,10 +46,10 @@ def _trim_array(vect: np.ndarray, percentage: float = None, limit: int | tuple[i
 
 def list_to_range(irange: list, maxlens: int) -> range:
     """
-    Convert a list specifying a range to a Python range object
+    Converts a list specifying a range to a Python range object.
 
     Input:
-        - irange: [start, end] list. defaults to [0, maxlens] if elements are None
+        - irange: [start, end] list. Defaults to [0, maxlens] if elements are None
         - maxlens: maximum length if end is None
 
     Output:
@@ -65,7 +67,7 @@ def list_to_range(irange: list, maxlens: int) -> range:
 
 def boolist_to_ranges(boolist: list[int | bool], minlens: int = 1) -> list[range]:
     """
-    Converts a boolean list to a list of range objects representing True(1) sequences
+    Converts a boolean list to a list of range objects representing True(1) sequences.
 
     Input:
         - boolist: boolean list
@@ -84,7 +86,7 @@ def boolist_to_ranges(boolist: list[int | bool], minlens: int = 1) -> list[range
 
 def ranges_to_boolist(ranges: list[range], length: int = None) -> list[int]:
     """
-    Converts a list of ranges to a boolean list
+    Converts a list of ranges to a boolean list.
 
     Input:
         - ranges: list of range objects
@@ -93,11 +95,8 @@ def ranges_to_boolist(ranges: list[range], length: int = None) -> list[int]:
     Output:
         - boolist: boolean list representing the ranges
     """
-
-    if length is None:
-        length = ranges[-1].stop
-
-    boolist = np.zeros(length).astype(int)
+    length = length or ranges[-1].stop
+    boolist = np.zeros(length, dtype=int)
     for r in ranges:
         boolist[r] = 1
 
@@ -133,11 +132,11 @@ def flip(ranges: list[range], head: int = 0, tail: int = None) -> list[range]:
 
 def fill(ranges: list[range], gapsize: int | tuple[int, int] = 1) -> list[range]:
     """
-    Fills ranges that are within max_gap distance from each other
+    Fills ranges that are within max_gap distance from each other.
 
     Input:
         - ranges: list of range objects
-        - mingap: maximum allowed gap between ranges to be filled
+        - gapsize: maximum allowed gap between ranges to be filled
 
     Output:
         - ranges: list of filled range objects
@@ -146,17 +145,13 @@ def fill(ranges: list[range], gapsize: int | tuple[int, int] = 1) -> list[range]
     if not ranges:
         return []
 
-    if isinstance(gapsize, int):
-        mingap, maxgap = 0, gapsize
-    else:
-        mingap, maxgap = gapsize[0], gapsize[1]
-
+    mingap, maxgap = (0, gapsize) if isinstance(gapsize, int) else gapsize
     merged_ranges = [ranges[0]]
 
     for current in ranges[1:]:
         previous = merged_ranges[-1]
-        gapsize = current.start - previous.stop
-        if gapsize >= mingap and gapsize <= maxgap:
+        gap = current.start - previous.stop
+        if mingap <= gap <= maxgap:
             merged_ranges[-1] = range(previous.start, current.stop)
         else:
             merged_ranges.append(current)
@@ -167,9 +162,23 @@ def fill(ranges: list[range], gapsize: int | tuple[int, int] = 1) -> list[range]
 def trim(
     ranges: list[range], minlens: int = 1, percentage: float = None, trimsize: int | tuple[int, int] = None
 ) -> list[range]:
+    """
+    Trims ranges based on minimum length, percentage, or specific trim sizes.
+
+    Input:
+        - ranges: list of range objects
+        - minlens: minimum range length
+        - percentage: percentage of data to remove
+        - trimsize: fixed number of elements to remove from both ends
+
+    Output:
+        - trimmed ranges
+    """
+
     rs = []
     for r in ranges:
         r = _trim_array(np.array(r), percentage=percentage, limit=trimsize)
         if len(r) >= minlens:
             rs.append(range(r[0], r[-1] + 1))
+
     return rs

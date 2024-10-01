@@ -8,7 +8,7 @@
 - **Boolean list to ranges**: Converts a boolean list to a list of range objects representing `True` or `1` sequences.
 - **Ranges to boolean list**: Converts a list of ranges back to a boolean list of specified length.
 - **Flip ranges**: Generate complementary ranges that are not covered by input ranges.
-- **Merge ranges**: Merge ranges that are within a specified gap size.
+- **Fill ranges**: Fill ranges that are within a specified gap size.
 - **Trim ranges**: Perform trimming on ranges based on length, percentage, or a specified trimming size.
 
 ## Installation
