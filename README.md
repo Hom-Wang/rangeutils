@@ -13,7 +13,7 @@
 
 ## Installation
 
-You can install `range_utils` using pip:
+You can install `rangeutils` using pip:
 
 ```bash
-pip install range_utils
+pip install rangeutils
