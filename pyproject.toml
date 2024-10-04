@@ -1,3 +1,28 @@
+[tool.poetry]
+name = "rangeutils"
+version = "0.0.0"
+description = "Utilities for manipulating and converting Python ranges and boolean lists"
+authors = ["kris.wang <wenhom.wang@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/Hom-Wang/rangeutils"
+repository = "https://github.com/Hom-Wang/rangeutils"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^2.1.1"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+style = "pep440"
+vcs = "git"
+dirty = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
 [tool.ruff]
 
 # A list of rule codes or prefixes to ignore.
