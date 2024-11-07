@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def _trim_array(vect: np.ndarray, percentage: float = None, limit: int | tuple[int, int] = None, axis: int = 0):
+def _trim_array(vect: np.ndarray, percentage: float = None, limit: int | tuple[int, int] = None, axis: int = 0) -> np.ndarray:
     """
     Trims an array based on percentage or fixed limits along a specified axis.
 
@@ -44,7 +44,7 @@ def _trim_array(vect: np.ndarray, percentage: float = None, limit: int | tuple[i
     return trimmed_arr
 
 
-def list_to_range(irange: list, maxlens: int) -> range:
+def list_to_range(irange: list[int], maxlens: int = None) -> range | None:
     """
     Converts a list specifying a range to a Python range object.
 
@@ -56,13 +56,17 @@ def list_to_range(irange: list, maxlens: int) -> range:
         - range: range object from start to end
     """
 
-    if irange is None:
-        return range(0, maxlens)
+    if irange is not None:
+        return range(0, maxlens) if maxlens else None
+    elif len(irange) < 2:
+        return None
 
     start = irange[0] if irange[0] is not None else 0
     end = irange[1] if irange[1] is not None else maxlens
+    if end is None:
+        return None
 
-    return range(start, end)
+    return range(int(start), int(end))
 
 
 def boolist_to_ranges(boolist: list[int | bool], minlens: int = 1) -> list[range]:

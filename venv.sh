@@ -12,3 +12,8 @@ target=$(ls -t dist/rangeutils-*.tar.gz | head -1)
 pip install "$target"
 
 deactivate
+
+
+# poetry env use python3
+# poetry config --list
+# poetry config virtualenvs.in-project true
