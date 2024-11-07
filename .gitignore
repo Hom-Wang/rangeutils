@@ -1,7 +1,9 @@
 __pycache__
 
+.venv
+
+poetry.lock
+
 *.egg-info
 *.spec
 dist
-
-.venv
